@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap');
+
+@layer base {
+  body {
+    @apply bg-bgBody text-textMain antialiased min-h-screen font-sans;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-bgCard border border-borderC rounded-xl p-4 md:p-6 shadow-sm mb-6;
+  }
+
+  .btn {
+    @apply px-4 py-2 rounded-lg font-medium border-none cursor-pointer transition-all duration-200 inline-flex items-center justify-center;
+  }
+  .btn-primary { @apply bg-primary text-white hover:bg-primaryHover shadow-sm; }
+  .btn-danger { @apply bg-danger text-white hover:opacity-90; }
+  .btn-success { @apply bg-success text-white hover:opacity-90; }
+  .btn-outline { @apply bg-transparent border border-borderC text-textMain hover:bg-gray-50; }
+  .btn:disabled { @apply opacity-50 cursor-not-allowed shadow-none hover:bg-opacity-100; }
+
+  .input {
+    @apply w-full p-2.5 rounded-lg border border-borderC bg-white text-textMain focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
+  }
+
+  .badge {
+    @apply px-2.5 py-1 rounded-md text-xs font-bold tracking-wide;
+  }
+
+  .list-item {
+    @apply p-4 md:p-5 border border-borderC mb-3 rounded-xl bg-white transition-all hover:shadow-md hover:border-primary/50;
+  }
+
+  .section-title {
+    @apply text-textMain font-bold text-xl mb-4 pb-2 border-b border-borderC;
+  }
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
