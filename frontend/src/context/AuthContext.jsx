@@ -33,14 +33,14 @@ export const AuthProvider = ({ children }) => {
     const res = await axios.post('http://localhost:5001/api/auth/register', userData);
     localStorage.setItem('token', res.data.token);
     setToken(res.data.token);
-    setUser({ _id: res.data._id, name: res.data.name, email: res.data.email, role: res.data.role });
+    setUser(res.data);
   };
 
   const login = async (userData) => {
     const res = await axios.post('http://localhost:5001/api/auth/login', userData);
     localStorage.setItem('token', res.data.token);
     setToken(res.data.token);
-    setUser({ _id: res.data._id, name: res.data.name, email: res.data.email, role: res.data.role });
+    setUser(res.data);
   };
 
   const logout = () => {
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, register, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, register, login, logout, loading, setUser }}>
       {children}
     </AuthContext.Provider>
   );
