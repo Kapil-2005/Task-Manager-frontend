@@ -23,9 +23,9 @@ const Dashboard = () => {
     setError('');
     try {
       const [projectsRes, tasksRes, usersRes] = await Promise.all([
-        axios.get('http://localhost:5001/api/projects'),
-        axios.get('http://localhost:5001/api/tasks'),
-        user?.role === 'admin' ? axios.get('http://localhost:5001/api/auth/users') : Promise.resolve({ data: [] })
+        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects'),
+        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks'),
+        user?.role === 'admin' ? axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users') : Promise.resolve({ data: [] })
       ]);
       setProjects(projectsRes.data);
       setTasks(tasksRes.data);
@@ -60,12 +60,12 @@ const Dashboard = () => {
       </div>
 
       {error && <div className="bg-danger/10 border border-danger text-danger font-medium p-4 rounded-lg mb-8">⚠️ {error}</div>}
-      
+
       {user && (
         <div className="card flex flex-col sm:flex-row items-center gap-6 bg-white border border-borderC">
           <div className="w-16 h-16 rounded-xl bg-primary/10 flex flex-shrink-0 items-center justify-center text-3xl font-bold text-primary shadow-sm overflow-hidden">
             {user.profilePicture ? (
-              <img src={`http://localhost:5001${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
+              <img src={`http://https://task-manager-backend-production-d7b3.up.railway.app:5001${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
             ) : (
               user.name.charAt(0).toUpperCase()
             )}
@@ -189,10 +189,10 @@ const TaskChartsAndActivity = ({ tasks, allUsers }) => {
 const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
   const [users, setUsers] = useState(allUsers);
   const [search, setSearch] = useState('');
-  
+
   const [newProjectName, setNewProjectName] = useState('');
   const [newTask, setNewTask] = useState({ title: '', project: '', assignedTo: '', priority: 'Medium', dueDate: '' });
-  
+
   const [taskSearch, setTaskSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterPriority, setFilterPriority] = useState('');
@@ -207,7 +207,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
     const matchDate = filterDate ? t.dueDate && t.dueDate.startsWith(filterDate) : true;
     return matchSearch && matchStatus && matchPriority && matchDate;
   });
-  
+
   const [actionError, setActionError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -226,7 +226,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
     setIsSubmitting(true);
     setActionError('');
     try {
-      await axios.post('http://localhost:5001/api/projects', { projectName: newProjectName, description: 'Created by Admin' });
+      await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects', { projectName: newProjectName, description: 'Created by Admin' });
       setNewProjectName('');
       await refreshData();
     } catch (err) {
@@ -240,7 +240,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
     setIsSubmitting(true);
     setActionError('');
     try {
-      await axios.post('http://localhost:5001/api/tasks', newTask);
+      await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks', newTask);
       setNewTask({ title: '', project: '', assignedTo: '', priority: 'Medium', dueDate: '' });
       await refreshData();
     } catch (err) {
@@ -253,7 +253,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
     setIsSubmitting(true);
     try {
       const project = projects.find(p => p._id === projectId);
-      await axios.put(`http://localhost:5001/api/projects/${projectId}`, { members: [...project.members, userId] });
+      await axios.put(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects/${projectId}`, { members: [...project.members, userId] });
       await refreshData();
     } catch (err) {
       setActionError('Error assigning member');
@@ -261,10 +261,10 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
   };
 
   const deleteItem = async (type, id) => {
-    if(!window.confirm(`Are you sure you want to delete this ${type.slice(0,-1)}?`)) return;
+    if (!window.confirm(`Are you sure you want to delete this ${type.slice(0, -1)}?`)) return;
     setIsSubmitting(true);
     try {
-      await axios.delete(`http://localhost:5001/api/${type}/${id}`);
+      await axios.delete(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/${type}/${id}`);
       await refreshData();
     } catch (err) {
       setActionError(`Error deleting ${type}`);
@@ -309,24 +309,24 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
           <div className="card !mb-0">
             <h3 className="section-title">Create New Task</h3>
             <form onSubmit={createTask} className="flex flex-col gap-4">
-              <input className="input !mb-0" type="text" placeholder="What needs to be done?" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} disabled={isSubmitting} />
+              <input className="input !mb-0" type="text" placeholder="What needs to be done?" value={newTask.title} onChange={e => setNewTask({ ...newTask, title: e.target.value })} disabled={isSubmitting} />
               <div className="flex flex-col sm:flex-row gap-4">
-                <select className="input !mb-0 flex-1" value={newTask.project} onChange={e => setNewTask({...newTask, project: e.target.value})} disabled={isSubmitting}>
+                <select className="input !mb-0 flex-1" value={newTask.project} onChange={e => setNewTask({ ...newTask, project: e.target.value })} disabled={isSubmitting}>
                   <option value="" disabled>1. Select Project</option>
                   {projects.map(p => <option key={p._id} value={p._id}>{p.projectName}</option>)}
                 </select>
-                <select className="input !mb-0 flex-1" value={newTask.assignedTo} onChange={e => setNewTask({...newTask, assignedTo: e.target.value})} disabled={isSubmitting}>
+                <select className="input !mb-0 flex-1" value={newTask.assignedTo} onChange={e => setNewTask({ ...newTask, assignedTo: e.target.value })} disabled={isSubmitting}>
                   <option value="" disabled>2. Assign Owner</option>
                   {users.map(u => <option key={u._id} value={u._id}>{u.name} ({u.role})</option>)}
                 </select>
               </div>
               <div className="flex flex-col sm:flex-row gap-4">
-                <select className="input !mb-0 flex-1" value={newTask.priority} onChange={e => setNewTask({...newTask, priority: e.target.value})} disabled={isSubmitting}>
+                <select className="input !mb-0 flex-1" value={newTask.priority} onChange={e => setNewTask({ ...newTask, priority: e.target.value })} disabled={isSubmitting}>
                   <option value="Low">Low Priority</option>
                   <option value="Medium">Medium Priority</option>
                   <option value="High">High Priority</option>
                 </select>
-                <input className="input !mb-0 flex-1" type="date" value={newTask.dueDate} onChange={e => setNewTask({...newTask, dueDate: e.target.value})} disabled={isSubmitting} />
+                <input className="input !mb-0 flex-1" type="date" value={newTask.dueDate} onChange={e => setNewTask({ ...newTask, dueDate: e.target.value })} disabled={isSubmitting} />
               </div>
               <button type="submit" className="btn btn-primary" disabled={isSubmitting}>Add Task</button>
             </form>
@@ -348,7 +348,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
                       <span className="badge bg-danger text-white ml-2">OVERDUE</span>
                     </div>
                     <p className="m-0 text-sm text-textMuted leading-relaxed">
-                      Owner: <span className="text-textMain font-medium">{allUsers.find(u => u._id === t.assignedTo)?.name || 'Unknown'}</span> <br/>
+                      Owner: <span className="text-textMain font-medium">{allUsers.find(u => u._id === t.assignedTo)?.name || 'Unknown'}</span> <br />
                       Due: <span className="text-danger font-bold">{new Date(t.dueDate).toLocaleDateString()}</span>
                     </p>
                   </div>
@@ -358,7 +358,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
             </div>
 
             <h3 className="section-title">All Tasks ({filteredTasks.length})</h3>
-            
+
             <div className="flex flex-col gap-3 mb-4 bg-bgBody p-4 rounded-xl border border-borderC">
               <input className="input !mb-0 shadow-sm" type="text" placeholder="Search by title or owner..." value={taskSearch} onChange={e => setTaskSearch(e.target.value)} />
               <div className="flex flex-col sm:flex-row gap-3">
@@ -382,23 +382,24 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
               {filteredTasks.length === 0 ? <p className="text-textMuted">No tasks match your filters.</p> : filteredTasks.map(t => {
                 const isOverdue = t.dueDate && new Date(t.dueDate) < new Date() && t.status !== 'Completed' && t.status !== 'completed';
                 return (
-                <div key={t._id} className={`list-item flex flex-col sm:flex-row justify-between sm:items-center gap-4 ${isOverdue ? 'border-l-4 border-l-danger bg-danger/5' : 'border-l-4 border-l-primary/50'}`}>
-                  <div>
-                    <div className="mb-2 flex flex-wrap items-center gap-2">
-                      <strong className="text-lg block w-full sm:w-auto text-textMain">{t.title}</strong>
-                      <span className={`badge text-white ${t.status === 'Completed' || t.status === 'completed' ? 'bg-success' : t.status === 'In Progress' || t.status === 'in-progress' ? 'bg-warning text-black' : 'bg-primary'}`}>{t.status === 'In Progress' ? 'Working on it' : t.status === 'Completed' ? 'Done' : 'Todo'}</span>
-                      {isOverdue && <span className="badge bg-danger text-white">OVERDUE</span>}
-                      <span className={`badge bg-transparent border border-borderC ${t.priority === 'High' ? 'text-danger border-danger/30 bg-danger/10' : t.priority === 'Medium' ? 'text-primary border-primary/30 bg-primary/10' : 'text-textMuted bg-gray-50'}`}>{t.priority}</span>
+                  <div key={t._id} className={`list-item flex flex-col sm:flex-row justify-between sm:items-center gap-4 ${isOverdue ? 'border-l-4 border-l-danger bg-danger/5' : 'border-l-4 border-l-primary/50'}`}>
+                    <div>
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
+                        <strong className="text-lg block w-full sm:w-auto text-textMain">{t.title}</strong>
+                        <span className={`badge text-white ${t.status === 'Completed' || t.status === 'completed' ? 'bg-success' : t.status === 'In Progress' || t.status === 'in-progress' ? 'bg-warning text-black' : 'bg-primary'}`}>{t.status === 'In Progress' ? 'Working on it' : t.status === 'Completed' ? 'Done' : 'Todo'}</span>
+                        {isOverdue && <span className="badge bg-danger text-white">OVERDUE</span>}
+                        <span className={`badge bg-transparent border border-borderC ${t.priority === 'High' ? 'text-danger border-danger/30 bg-danger/10' : t.priority === 'Medium' ? 'text-primary border-primary/30 bg-primary/10' : 'text-textMuted bg-gray-50'}`}>{t.priority}</span>
+                      </div>
+                      <p className="m-0 text-sm text-textMuted leading-relaxed">
+                        Owner: <span className="text-textMain font-medium">{allUsers.find(u => u._id === t.assignedTo)?.name || 'Unknown'}</span> <br />
+                        Project: <span className="text-textMain font-medium">{projects.find(p => p._id === t.project)?.projectName || 'Unknown'}</span>
+                        {t.dueDate && <><br />Due: <span className={isOverdue ? 'text-danger font-bold' : 'text-textMain font-medium'}>{new Date(t.dueDate).toLocaleDateString()}</span></>}
+                      </p>
                     </div>
-                    <p className="m-0 text-sm text-textMuted leading-relaxed">
-                      Owner: <span className="text-textMain font-medium">{allUsers.find(u => u._id === t.assignedTo)?.name || 'Unknown'}</span> <br/>
-                      Project: <span className="text-textMain font-medium">{projects.find(p => p._id === t.project)?.projectName || 'Unknown'}</span>
-                      {t.dueDate && <><br/>Due: <span className={isOverdue ? 'text-danger font-bold' : 'text-textMain font-medium'}>{new Date(t.dueDate).toLocaleDateString()}</span></>}
-                    </p>
+                    <button className="text-textMuted hover:text-danger text-sm font-bold transition-colors w-full sm:w-auto text-left sm:text-right" onClick={() => deleteItem('tasks', t._id)} disabled={isSubmitting}>Delete</button>
                   </div>
-                  <button className="text-textMuted hover:text-danger text-sm font-bold transition-colors w-full sm:w-auto text-left sm:text-right" onClick={() => deleteItem('tasks', t._id)} disabled={isSubmitting}>Delete</button>
-                </div>
-              )})}
+                )
+              })}
             </div>
           </div>
         </div>
@@ -409,7 +410,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
 
 const MemberView = ({ projects, tasks, refreshData }) => {
   const [isUpdating, setIsUpdating] = useState(false);
-  
+
   const [taskSearch, setTaskSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterPriority, setFilterPriority] = useState('');
@@ -427,7 +428,7 @@ const MemberView = ({ projects, tasks, refreshData }) => {
   const updateStatus = async (taskId, newStatus) => {
     setIsUpdating(true);
     try {
-      await axios.put(`http://localhost:5001/api/tasks/${taskId}`, { status: newStatus });
+      await axios.put(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks/${taskId}`, { status: newStatus });
       await refreshData();
     } catch (err) {
       alert('Error updating status');
@@ -459,21 +460,21 @@ const MemberView = ({ projects, tasks, refreshData }) => {
             <p className="text-textMuted">You have no overdue tasks!</p>
           ) : tasks.filter(t => t.dueDate && new Date(t.dueDate) < new Date() && t.status !== 'Completed' && t.status !== 'completed').map(t => (
             <div key={t._id} className="list-item border-l-4 border-l-danger bg-danger/5">
-               <strong className="text-lg text-textMain">{t.title}</strong>
-               <div className="mt-3 flex flex-wrap items-center gap-2">
-                  <span className="badge bg-danger text-white">OVERDUE</span>
-                  <span className="text-sm text-danger font-bold">Due: {new Date(t.dueDate).toLocaleDateString()}</span>
-               </div>
-               <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                  <button className={`btn btn-outline flex-1 ${t.status === 'In Progress' || t.status === 'in-progress' ? 'opacity-50 cursor-not-allowed' : 'border-warning text-warning hover:bg-warning/10'}`} onClick={() => updateStatus(t._id, 'In Progress')} disabled={isUpdating || t.status === 'In Progress' || t.status === 'in-progress'}>Working on it</button>
-                  <button className="btn btn-success flex-1" onClick={() => updateStatus(t._id, 'Completed')} disabled={isUpdating}>Mark as Done</button>
-               </div>
+              <strong className="text-lg text-textMain">{t.title}</strong>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <span className="badge bg-danger text-white">OVERDUE</span>
+                <span className="text-sm text-danger font-bold">Due: {new Date(t.dueDate).toLocaleDateString()}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                <button className={`btn btn-outline flex-1 ${t.status === 'In Progress' || t.status === 'in-progress' ? 'opacity-50 cursor-not-allowed' : 'border-warning text-warning hover:bg-warning/10'}`} onClick={() => updateStatus(t._id, 'In Progress')} disabled={isUpdating || t.status === 'In Progress' || t.status === 'in-progress'}>Working on it</button>
+                <button className="btn btn-success flex-1" onClick={() => updateStatus(t._id, 'Completed')} disabled={isUpdating}>Mark as Done</button>
+              </div>
             </div>
           ))}
         </div>
 
         <h3 className="section-title">My Tasks ({filteredTasks.length})</h3>
-        
+
         <div className="flex flex-col gap-3 mb-6 bg-bgBody p-4 rounded-xl border border-borderC">
           <input className="input !mb-0 shadow-sm" type="text" placeholder="Search my tasks..." value={taskSearch} onChange={e => setTaskSearch(e.target.value)} />
           <div className="flex flex-col sm:flex-row gap-3">
@@ -499,26 +500,27 @@ const MemberView = ({ projects, tasks, refreshData }) => {
               {filteredTasks.map(t => {
                 const isOverdue = t.dueDate && new Date(t.dueDate) < new Date() && t.status !== 'Completed' && t.status !== 'completed';
                 return (
-                <div key={t._id} className={`list-item flex flex-col gap-4 ${isOverdue ? 'border-l-4 border-l-danger bg-danger/5' : 'border-l-4 border-l-primary/50'}`}>
-                  <div>
-                    <strong className="text-lg text-textMain">{t.title}</strong>
-                    <div className="mt-3 flex flex-wrap items-center gap-2">
-                      <span className={`badge ${t.status === 'Completed' || t.status === 'completed' ? 'bg-success text-white' : t.status === 'In Progress' || t.status === 'in-progress' ? 'bg-warning text-black' : 'bg-bgBody border border-borderC text-textMain'}`}>
-                        {t.status === 'In Progress' ? 'Working on it' : t.status === 'Completed' ? 'Done' : 'Todo'}
-                      </span>
-                      {isOverdue && <span className="badge bg-danger text-white">OVERDUE</span>}
-                      <span className={`badge bg-transparent border border-borderC ${t.priority === 'High' ? 'text-danger border-danger/30 bg-danger/10' : t.priority === 'Medium' ? 'text-primary border-primary/30 bg-primary/10' : 'text-textMuted bg-gray-50'}`}>
-                        {t.priority}
-                      </span>
+                  <div key={t._id} className={`list-item flex flex-col gap-4 ${isOverdue ? 'border-l-4 border-l-danger bg-danger/5' : 'border-l-4 border-l-primary/50'}`}>
+                    <div>
+                      <strong className="text-lg text-textMain">{t.title}</strong>
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        <span className={`badge ${t.status === 'Completed' || t.status === 'completed' ? 'bg-success text-white' : t.status === 'In Progress' || t.status === 'in-progress' ? 'bg-warning text-black' : 'bg-bgBody border border-borderC text-textMain'}`}>
+                          {t.status === 'In Progress' ? 'Working on it' : t.status === 'Completed' ? 'Done' : 'Todo'}
+                        </span>
+                        {isOverdue && <span className="badge bg-danger text-white">OVERDUE</span>}
+                        <span className={`badge bg-transparent border border-borderC ${t.priority === 'High' ? 'text-danger border-danger/30 bg-danger/10' : t.priority === 'Medium' ? 'text-primary border-primary/30 bg-primary/10' : 'text-textMuted bg-gray-50'}`}>
+                          {t.priority}
+                        </span>
+                      </div>
+                      {t.dueDate && <div className={`text-sm mt-3 ${isOverdue ? 'text-danger font-bold' : 'text-textMuted font-medium'}`}>Due: {new Date(t.dueDate).toLocaleDateString()}</div>}
                     </div>
-                    {t.dueDate && <div className={`text-sm mt-3 ${isOverdue ? 'text-danger font-bold' : 'text-textMuted font-medium'}`}>Due: {new Date(t.dueDate).toLocaleDateString()}</div>}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <button className={`btn btn-outline flex-1 ${t.status === 'In Progress' || t.status === 'in-progress' ? 'opacity-50 cursor-not-allowed' : 'border-warning text-warning hover:bg-warning/10'}`} onClick={() => updateStatus(t._id, 'In Progress')} disabled={isUpdating || t.status === 'In Progress' || t.status === 'in-progress'}>Working on it</button>
+                      <button className={`btn btn-success flex-1 ${t.status === 'Completed' || t.status === 'completed' ? 'opacity-50 cursor-not-allowed' : ''}`} onClick={() => updateStatus(t._id, 'Completed')} disabled={isUpdating || t.status === 'Completed' || t.status === 'completed'}>Mark as Done</button>
+                    </div>
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-3">
-                    <button className={`btn btn-outline flex-1 ${t.status === 'In Progress' || t.status === 'in-progress' ? 'opacity-50 cursor-not-allowed' : 'border-warning text-warning hover:bg-warning/10'}`} onClick={() => updateStatus(t._id, 'In Progress')} disabled={isUpdating || t.status === 'In Progress' || t.status === 'in-progress'}>Working on it</button>
-                    <button className={`btn btn-success flex-1 ${t.status === 'Completed' || t.status === 'completed' ? 'opacity-50 cursor-not-allowed' : ''}`} onClick={() => updateStatus(t._id, 'Completed')} disabled={isUpdating || t.status === 'Completed' || t.status === 'completed'}>Mark as Done</button>
-                  </div>
-                </div>
-              )})}
+                )
+              })}
             </div>
           )}
         </div>

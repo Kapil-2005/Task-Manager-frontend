@@ -16,9 +16,9 @@ const DashboardOverview = () => {
       setLoading(true);
       try {
         const [projectsRes, tasksRes, usersRes] = await Promise.all([
-          axios.get('http://localhost:5001/api/projects'),
-          axios.get('http://localhost:5001/api/tasks'),
-          user?.role === 'admin' ? axios.get('http://localhost:5001/api/auth/users') : Promise.resolve({ data: [] })
+          axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects'),
+          axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks'),
+          user?.role === 'admin' ? axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users') : Promise.resolve({ data: [] })
         ]);
         setProjects(projectsRes.data);
         setTasks(tasksRes.data);
@@ -52,7 +52,7 @@ const DashboardOverview = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold text-textMain mb-8">Dashboard Overview</h1>
-      
+
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
         <div className="card !mb-0 border-t-4 border-t-primary p-5 text-center sm:text-left">
           <h4 className="text-textMuted text-xs font-bold uppercase tracking-wide m-0">Projects</h4>

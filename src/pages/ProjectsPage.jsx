@@ -14,8 +14,8 @@ const ProjectsPage = () => {
   const fetchProjects = async () => {
     try {
       const [projectsRes, usersRes] = await Promise.all([
-        axios.get('http://localhost:5001/api/projects'),
-        user?.role === 'admin' ? axios.get('http://localhost:5001/api/auth/users') : Promise.resolve({ data: [] })
+        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects'),
+        user?.role === 'admin' ? axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users') : Promise.resolve({ data: [] })
       ]);
       setProjects(projectsRes.data);
       if (usersRes.data.length > 0) setAllUsers(usersRes.data);
@@ -35,7 +35,7 @@ const ProjectsPage = () => {
     if (!newProjectName) return;
     setIsSubmitting(true);
     try {
-      await axios.post('http://localhost:5001/api/projects', { projectName: newProjectName, description: 'Created by Admin' });
+      await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects', { projectName: newProjectName, description: 'Created by Admin' });
       setNewProjectName('');
       fetchProjects();
     } catch (err) {
@@ -48,7 +48,7 @@ const ProjectsPage = () => {
     setIsSubmitting(true);
     try {
       const project = projects.find(p => p._id === projectId);
-      await axios.put(`http://localhost:5001/api/projects/${projectId}`, { members: [...project.members, userId] });
+      await axios.put(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects/${projectId}`, { members: [...project.members, userId] });
       fetchProjects();
     } catch (err) {
       console.error(err);
@@ -56,10 +56,10 @@ const ProjectsPage = () => {
   };
 
   const deleteProject = async (id) => {
-    if(!window.confirm('Delete this project?')) return;
+    if (!window.confirm('Delete this project?')) return;
     setIsSubmitting(true);
     try {
-      await axios.delete(`http://localhost:5001/api/projects/${id}`);
+      await axios.delete(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects/${id}`);
       fetchProjects();
     } catch (err) {
       console.error(err);
@@ -89,7 +89,7 @@ const ProjectsPage = () => {
               <Link to={`/projects/${p._id}`} className="text-xl font-bold text-primary hover:underline">{p.projectName}</Link>
               <p className="text-sm text-textMuted mt-2">{p.description}</p>
             </div>
-            
+
             {user?.role === 'admin' && (
               <div className="mt-4 flex items-center gap-2 bg-bgBody p-2 rounded-lg border border-borderC">
                 <span className="text-xs font-bold text-textMuted whitespace-nowrap ml-1">TEAM</span>

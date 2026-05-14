@@ -30,15 +30,15 @@ const Layout = () => {
         <div className="p-6 border-b border-borderC">
           <h1 className="text-2xl font-bold text-primary tracking-tight">Ethara</h1>
         </div>
-        
+
         <nav className="flex-1 p-4 flex flex-col gap-2 overflow-y-auto">
           <div className="text-xs font-bold text-textMuted uppercase tracking-wider mb-2 ml-2">Menu</div>
           {navItems.map(item => {
             const isActive = location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
             return (
-              <Link 
-                key={item.path} 
-                to={item.path} 
+              <Link
+                key={item.path}
+                to={item.path}
                 className={`p-3 rounded-lg font-medium transition-colors ${isActive ? 'bg-primary/10 text-primary' : 'text-textMain hover:bg-gray-100'}`}
               >
                 {item.name}
@@ -46,13 +46,13 @@ const Layout = () => {
             );
           })}
         </nav>
-        
+
         {user && (
           <div className="p-4 border-t border-borderC bg-gray-50 flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 overflow-hidden">
               <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold flex-shrink-0 overflow-hidden">
                 {user.profilePicture ? (
-                  <img src={`http://localhost:5001${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
+                  <img src={`http://https://task-manager-backend-production-d7b3.up.railway.app:5001${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
                   user.name.charAt(0).toUpperCase()
                 )}

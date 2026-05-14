@@ -10,7 +10,7 @@ const EmployeeList = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await axios.get('http://localhost:5001/api/auth/users');
+        const res = await axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users');
         // Filter only users with role 'member' (employees)
         const memberUsers = res.data.filter(u => u.role === 'member');
         setEmployees(memberUsers);
@@ -35,7 +35,7 @@ const EmployeeList = () => {
   return (
     <div>
       <h1 className="text-3xl font-bold text-textMain mb-8">Employee List</h1>
-      
+
       <div className="card">
         <h3 className="section-title">All Employees ({employees.length})</h3>
         <div className="overflow-x-auto">
@@ -54,7 +54,7 @@ const EmployeeList = () => {
                   <td className="p-3 font-medium text-textMain flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden flex-shrink-0">
                       {emp.profilePicture ? (
-                        <img src={`http://localhost:5001${emp.profilePicture}`} className="w-full h-full object-cover"/>
+                        <img src={`http://https://task-manager-backend-production-d7b3.up.railway.app:5001${emp.profilePicture}`} className="w-full h-full object-cover" />
                       ) : (
                         emp.name.charAt(0).toUpperCase()
                       )}

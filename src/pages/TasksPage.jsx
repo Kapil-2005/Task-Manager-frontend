@@ -7,12 +7,12 @@ const TasksPage = () => {
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
-  
+
   const [taskSearch, setTaskSearch] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterPriority, setFilterPriority] = useState('');
   const [filterDate, setFilterDate] = useState('');
-  
+
   const [newTask, setNewTask] = useState({ title: '', project: '', assignedTo: '', priority: 'Medium', dueDate: '' });
   const [loading, setLoading] = useState(true);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -20,9 +20,9 @@ const TasksPage = () => {
   const fetchTasks = async () => {
     try {
       const [tasksRes, projectsRes, usersRes] = await Promise.all([
-        axios.get('http://localhost:5001/api/tasks'),
-        axios.get('http://localhost:5001/api/projects'),
-        user?.role === 'admin' ? axios.get('http://localhost:5001/api/auth/users') : Promise.resolve({ data: [] })
+        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks'),
+        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects'),
+        user?.role === 'admin' ? axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users') : Promise.resolve({ data: [] })
       ]);
       setTasks(tasksRes.data);
       setProjects(projectsRes.data);
@@ -41,7 +41,7 @@ const TasksPage = () => {
   const updateStatus = async (taskId, newStatus) => {
     setIsUpdating(true);
     try {
-      await axios.put(`http://localhost:5001/api/tasks/${taskId}`, { status: newStatus });
+      await axios.put(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks/${taskId}`, { status: newStatus });
       fetchTasks();
     } catch (err) {
       console.error(err);
@@ -49,10 +49,10 @@ const TasksPage = () => {
   };
 
   const deleteTask = async (taskId) => {
-    if(!window.confirm('Delete this task?')) return;
+    if (!window.confirm('Delete this task?')) return;
     setIsUpdating(true);
     try {
-      await axios.delete(`http://localhost:5001/api/tasks/${taskId}`);
+      await axios.delete(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks/${taskId}`);
       fetchTasks();
     } catch (err) {
       console.error(err);
@@ -64,7 +64,7 @@ const TasksPage = () => {
     if (!newTask.title || !newTask.project || !newTask.assignedTo) return alert('Please fill all required task fields');
     setIsUpdating(true);
     try {
-      await axios.post('http://localhost:5001/api/tasks', newTask);
+      await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks', newTask);
       setNewTask({ title: '', project: '', assignedTo: '', priority: 'Medium', dueDate: '' });
       fetchTasks();
     } catch (err) {
@@ -92,24 +92,24 @@ const TasksPage = () => {
         <div className="card mb-8">
           <h3 className="section-title">Create New Task</h3>
           <form onSubmit={createTask} className="flex flex-col gap-4">
-            <input className="input !mb-0" type="text" placeholder="What needs to be done?" value={newTask.title} onChange={e => setNewTask({...newTask, title: e.target.value})} disabled={isUpdating} />
+            <input className="input !mb-0" type="text" placeholder="What needs to be done?" value={newTask.title} onChange={e => setNewTask({ ...newTask, title: e.target.value })} disabled={isUpdating} />
             <div className="flex flex-col sm:flex-row gap-4">
-              <select className="input !mb-0 flex-1" value={newTask.project} onChange={e => setNewTask({...newTask, project: e.target.value})} disabled={isUpdating}>
+              <select className="input !mb-0 flex-1" value={newTask.project} onChange={e => setNewTask({ ...newTask, project: e.target.value })} disabled={isUpdating}>
                 <option value="" disabled>1. Select Project</option>
                 {projects.map(p => <option key={p._id} value={p._id}>{p.projectName}</option>)}
               </select>
-              <select className="input !mb-0 flex-1" value={newTask.assignedTo} onChange={e => setNewTask({...newTask, assignedTo: e.target.value})} disabled={isUpdating}>
+              <select className="input !mb-0 flex-1" value={newTask.assignedTo} onChange={e => setNewTask({ ...newTask, assignedTo: e.target.value })} disabled={isUpdating}>
                 <option value="" disabled>2. Assign Owner</option>
                 {allUsers.map(u => <option key={u._id} value={u._id}>{u.name} ({u.role})</option>)}
               </select>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
-              <select className="input !mb-0 flex-1" value={newTask.priority} onChange={e => setNewTask({...newTask, priority: e.target.value})} disabled={isUpdating}>
+              <select className="input !mb-0 flex-1" value={newTask.priority} onChange={e => setNewTask({ ...newTask, priority: e.target.value })} disabled={isUpdating}>
                 <option value="Low">Low Priority</option>
                 <option value="Medium">Medium Priority</option>
                 <option value="High">High Priority</option>
               </select>
-              <input className="input !mb-0 flex-1" type="date" value={newTask.dueDate} onChange={e => setNewTask({...newTask, dueDate: e.target.value})} disabled={isUpdating} />
+              <input className="input !mb-0 flex-1" type="date" value={newTask.dueDate} onChange={e => setNewTask({ ...newTask, dueDate: e.target.value })} disabled={isUpdating} />
             </div>
             <button type="submit" className="btn btn-primary" disabled={isUpdating}>Add Task</button>
           </form>
@@ -151,7 +151,7 @@ const TasksPage = () => {
                 <p className="m-0 text-sm text-textMuted">
                   {user?.role === 'admin' && <><span className="font-medium text-textMain">Owner:</span> {allUsers.find(u => u._id === t.assignedTo)?.name || 'Unknown'} &bull; </>}
                   <span className="font-medium text-textMain">Project:</span> {projects.find(p => p._id === t.project)?.projectName || 'Unknown'}
-                  {t.dueDate && <><br/><span className={isOverdue ? 'text-danger font-bold' : 'font-medium text-textMain'}>Due: {new Date(t.dueDate).toLocaleDateString()}</span></>}
+                  {t.dueDate && <><br /><span className={isOverdue ? 'text-danger font-bold' : 'font-medium text-textMain'}>Due: {new Date(t.dueDate).toLocaleDateString()}</span></>}
                 </p>
               </div>
               <div className="flex flex-col sm:flex-row gap-2 md:w-auto w-full">

@@ -23,7 +23,7 @@ const ProfilePage = () => {
 
     try {
       setUploading(true);
-      const res = await axios.post('http://localhost:5001/api/auth/photo', formData, {
+      const res = await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/photo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
@@ -43,26 +43,26 @@ const ProfilePage = () => {
   return (
     <div className="max-w-2xl">
       <h1 className="text-3xl font-bold text-textMain mb-8">My Profile</h1>
-      
+
       <div className="card text-center sm:text-left flex flex-col sm:flex-row items-center gap-8">
         <div className="relative group w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center text-5xl font-bold text-primary shadow-sm border-4 border-white overflow-hidden">
           {user.profilePicture ? (
-            <img src={`http://localhost:5001${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
+            <img src={`http://https://task-manager-backend-production-d7b3.up.railway.app:5001${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
           ) : (
             user.name.charAt(0).toUpperCase()
           )}
-          
-          <div 
+
+          <div
             className="absolute inset-0 bg-black/50 hidden group-hover:flex items-center justify-center cursor-pointer transition-all"
             onClick={() => fileInputRef.current?.click()}
           >
             <span className="text-white text-xs font-medium">{uploading ? 'Uploading...' : 'Change Photo'}</span>
           </div>
-          <input 
-            type="file" 
-            ref={fileInputRef} 
-            onChange={handlePhotoUpload} 
-            className="hidden" 
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handlePhotoUpload}
+            className="hidden"
             accept="image/*"
           />
         </div>
@@ -91,10 +91,10 @@ const ProfilePage = () => {
             <span className="text-textMain font-mono text-sm">{user.employeeId || user._id}</span>
           </div>
         </div>
-        
+
         <div className="mt-8 border-t border-borderC pt-6 flex justify-end">
-          <button 
-            onClick={handleLogout} 
+          <button
+            onClick={handleLogout}
             className="btn btn-outline border-danger text-danger hover:bg-danger hover:text-white transition-colors"
           >
             Log out of account
