@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/me');
+      const res = await axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/me');
       setUser(res.data);
     } catch (error) {
       console.error(error);
@@ -30,14 +30,14 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (userData) => {
-    const res = await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/register', userData);
+    const res = await axios.post('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/register', userData);
     localStorage.setItem('token', res.data.token);
     setToken(res.data.token);
     setUser(res.data);
   };
 
   const login = async (userData) => {
-    const res = await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/login', userData);
+    const res = await axios.post('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/login', userData);
     localStorage.setItem('token', res.data.token);
     setToken(res.data.token);
     setUser(res.data);

@@ -16,9 +16,9 @@ const DashboardOverview = () => {
       setLoading(true);
       try {
         const [projectsRes, tasksRes, usersRes] = await Promise.all([
-          axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects'),
-          axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks'),
-          user?.role === 'admin' ? axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users') : Promise.resolve({ data: [] })
+          axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/projects'),
+          axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/tasks'),
+          user?.role === 'admin' ? axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/users') : Promise.resolve({ data: [] })
         ]);
         setProjects(projectsRes.data);
         setTasks(tasksRes.data);

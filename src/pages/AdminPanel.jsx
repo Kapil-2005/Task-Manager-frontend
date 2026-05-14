@@ -13,7 +13,7 @@ const AdminPanel = () => {
 
   const fetchUsers = async () => {
     try {
-      const res = await axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users');
+      const res = await axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/users');
       setUsers(res.data);
     } catch (err) {
       console.error(err);
@@ -44,7 +44,7 @@ const AdminPanel = () => {
   const handleSave = async (userId) => {
     setIsUpdating(true);
     try {
-      await axios.put(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users/${userId}`, editFormData);
+      await axios.put(`https://task-manager-backend-production-d7b3.up.railway.app/api/auth/users/${userId}`, editFormData);
       setEditingId(null);
       fetchUsers();
     } catch (err) {
@@ -59,7 +59,7 @@ const AdminPanel = () => {
     if (!window.confirm('Are you sure you want to permanently remove this user?')) return;
     setIsUpdating(true);
     try {
-      await axios.delete(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users/${userId}`);
+      await axios.delete(`https://task-manager-backend-production-d7b3.up.railway.app/api/auth/users/${userId}`);
       fetchUsers();
     } catch (err) {
       console.error(err);
@@ -100,7 +100,7 @@ const AdminPanel = () => {
                   <tr key={u._id} className="border-b border-borderC hover:bg-gray-50 transition-colors">
                     <td className="p-3 font-medium text-textMain flex items-center gap-3">
                       <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold overflow-hidden flex-shrink-0">
-                        {u.profilePicture ? <img src={`http://https://task-manager-backend-production-d7b3.up.railway.app:5001${u.profilePicture}`} className="w-full h-full object-cover" /> : u.name.charAt(0).toUpperCase()}
+                        {u.profilePicture ? <img src={`https://task-manager-backend-production-d7b3.up.railway.app${u.profilePicture}`} className="w-full h-full object-cover" /> : u.name.charAt(0).toUpperCase()}
                       </div>
                       {isEditing ? <input type="text" name="name" value={editFormData.name} onChange={handleChange} className="input !p-1.5 !mb-0 text-sm w-full" disabled={isUpdating} /> : u.name}
                     </td>

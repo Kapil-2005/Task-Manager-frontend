@@ -52,7 +52,7 @@ const Layout = () => {
             <div className="flex items-center gap-3 overflow-hidden">
               <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white font-bold flex-shrink-0 overflow-hidden">
                 {user.profilePicture ? (
-                  <img src={`http://https://task-manager-backend-production-d7b3.up.railway.app:5001${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
+                  <img src={`https://task-manager-backend-production-d7b3.up.railway.app${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
                 ) : (
                   user.name.charAt(0).toUpperCase()
                 )}

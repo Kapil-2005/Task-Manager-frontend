@@ -14,8 +14,8 @@ const ProjectsPage = () => {
   const fetchProjects = async () => {
     try {
       const [projectsRes, usersRes] = await Promise.all([
-        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects'),
-        user?.role === 'admin' ? axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users') : Promise.resolve({ data: [] })
+        axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/projects'),
+        user?.role === 'admin' ? axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/users') : Promise.resolve({ data: [] })
       ]);
       setProjects(projectsRes.data);
       if (usersRes.data.length > 0) setAllUsers(usersRes.data);
@@ -35,7 +35,7 @@ const ProjectsPage = () => {
     if (!newProjectName) return;
     setIsSubmitting(true);
     try {
-      await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects', { projectName: newProjectName, description: 'Created by Admin' });
+      await axios.post('https://task-manager-backend-production-d7b3.up.railway.app/api/projects', { projectName: newProjectName, description: 'Created by Admin' });
       setNewProjectName('');
       fetchProjects();
     } catch (err) {
@@ -48,7 +48,7 @@ const ProjectsPage = () => {
     setIsSubmitting(true);
     try {
       const project = projects.find(p => p._id === projectId);
-      await axios.put(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects/${projectId}`, { members: [...project.members, userId] });
+      await axios.put(`https://task-manager-backend-production-d7b3.up.railway.app/api/projects/${projectId}`, { members: [...project.members, userId] });
       fetchProjects();
     } catch (err) {
       console.error(err);
@@ -59,7 +59,7 @@ const ProjectsPage = () => {
     if (!window.confirm('Delete this project?')) return;
     setIsSubmitting(true);
     try {
-      await axios.delete(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects/${id}`);
+      await axios.delete(`https://task-manager-backend-production-d7b3.up.railway.app/api/projects/${id}`);
       fetchProjects();
     } catch (err) {
       console.error(err);

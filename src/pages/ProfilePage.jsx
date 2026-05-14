@@ -23,7 +23,7 @@ const ProfilePage = () => {
 
     try {
       setUploading(true);
-      const res = await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/photo', formData, {
+      const res = await axios.post('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/photo', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`
@@ -47,7 +47,7 @@ const ProfilePage = () => {
       <div className="card text-center sm:text-left flex flex-col sm:flex-row items-center gap-8">
         <div className="relative group w-32 h-32 rounded-full bg-primary/10 flex items-center justify-center text-5xl font-bold text-primary shadow-sm border-4 border-white overflow-hidden">
           {user.profilePicture ? (
-            <img src={`http://https://task-manager-backend-production-d7b3.up.railway.app:5001${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
+            <img src={`https://task-manager-backend-production-d7b3.up.railway.app${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
           ) : (
             user.name.charAt(0).toUpperCase()
           )}

@@ -20,9 +20,9 @@ const TasksPage = () => {
   const fetchTasks = async () => {
     try {
       const [tasksRes, projectsRes, usersRes] = await Promise.all([
-        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks'),
-        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects'),
-        user?.role === 'admin' ? axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users') : Promise.resolve({ data: [] })
+        axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/tasks'),
+        axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/projects'),
+        user?.role === 'admin' ? axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/users') : Promise.resolve({ data: [] })
       ]);
       setTasks(tasksRes.data);
       setProjects(projectsRes.data);
@@ -41,7 +41,7 @@ const TasksPage = () => {
   const updateStatus = async (taskId, newStatus) => {
     setIsUpdating(true);
     try {
-      await axios.put(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks/${taskId}`, { status: newStatus });
+      await axios.put(`https://task-manager-backend-production-d7b3.up.railway.app/api/tasks/${taskId}`, { status: newStatus });
       fetchTasks();
     } catch (err) {
       console.error(err);
@@ -52,7 +52,7 @@ const TasksPage = () => {
     if (!window.confirm('Delete this task?')) return;
     setIsUpdating(true);
     try {
-      await axios.delete(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks/${taskId}`);
+      await axios.delete(`https://task-manager-backend-production-d7b3.up.railway.app/api/tasks/${taskId}`);
       fetchTasks();
     } catch (err) {
       console.error(err);
@@ -64,7 +64,7 @@ const TasksPage = () => {
     if (!newTask.title || !newTask.project || !newTask.assignedTo) return alert('Please fill all required task fields');
     setIsUpdating(true);
     try {
-      await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks', newTask);
+      await axios.post('https://task-manager-backend-production-d7b3.up.railway.app/api/tasks', newTask);
       setNewTask({ title: '', project: '', assignedTo: '', priority: 'Medium', dueDate: '' });
       fetchTasks();
     } catch (err) {

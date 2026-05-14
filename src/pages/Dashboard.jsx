@@ -23,9 +23,9 @@ const Dashboard = () => {
     setError('');
     try {
       const [projectsRes, tasksRes, usersRes] = await Promise.all([
-        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects'),
-        axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks'),
-        user?.role === 'admin' ? axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users') : Promise.resolve({ data: [] })
+        axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/projects'),
+        axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/tasks'),
+        user?.role === 'admin' ? axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/users') : Promise.resolve({ data: [] })
       ]);
       setProjects(projectsRes.data);
       setTasks(tasksRes.data);
@@ -65,7 +65,7 @@ const Dashboard = () => {
         <div className="card flex flex-col sm:flex-row items-center gap-6 bg-white border border-borderC">
           <div className="w-16 h-16 rounded-xl bg-primary/10 flex flex-shrink-0 items-center justify-center text-3xl font-bold text-primary shadow-sm overflow-hidden">
             {user.profilePicture ? (
-              <img src={`http://https://task-manager-backend-production-d7b3.up.railway.app:5001${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
+              <img src={`https://task-manager-backend-production-d7b3.up.railway.app${user.profilePicture}`} alt="Profile" className="w-full h-full object-cover" />
             ) : (
               user.name.charAt(0).toUpperCase()
             )}
@@ -226,7 +226,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
     setIsSubmitting(true);
     setActionError('');
     try {
-      await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects', { projectName: newProjectName, description: 'Created by Admin' });
+      await axios.post('https://task-manager-backend-production-d7b3.up.railway.app/api/projects', { projectName: newProjectName, description: 'Created by Admin' });
       setNewProjectName('');
       await refreshData();
     } catch (err) {
@@ -240,7 +240,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
     setIsSubmitting(true);
     setActionError('');
     try {
-      await axios.post('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks', newTask);
+      await axios.post('https://task-manager-backend-production-d7b3.up.railway.app/api/tasks', newTask);
       setNewTask({ title: '', project: '', assignedTo: '', priority: 'Medium', dueDate: '' });
       await refreshData();
     } catch (err) {
@@ -253,7 +253,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
     setIsSubmitting(true);
     try {
       const project = projects.find(p => p._id === projectId);
-      await axios.put(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects/${projectId}`, { members: [...project.members, userId] });
+      await axios.put(`https://task-manager-backend-production-d7b3.up.railway.app/api/projects/${projectId}`, { members: [...project.members, userId] });
       await refreshData();
     } catch (err) {
       setActionError('Error assigning member');
@@ -264,7 +264,7 @@ const AdminView = ({ projects, tasks, allUsers, refreshData }) => {
     if (!window.confirm(`Are you sure you want to delete this ${type.slice(0, -1)}?`)) return;
     setIsSubmitting(true);
     try {
-      await axios.delete(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/${type}/${id}`);
+      await axios.delete(`https://task-manager-backend-production-d7b3.up.railway.app/api/${type}/${id}`);
       await refreshData();
     } catch (err) {
       setActionError(`Error deleting ${type}`);
@@ -428,7 +428,7 @@ const MemberView = ({ projects, tasks, refreshData }) => {
   const updateStatus = async (taskId, newStatus) => {
     setIsUpdating(true);
     try {
-      await axios.put(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks/${taskId}`, { status: newStatus });
+      await axios.put(`https://task-manager-backend-production-d7b3.up.railway.app/api/tasks/${taskId}`, { status: newStatus });
       await refreshData();
     } catch (err) {
       alert('Error updating status');

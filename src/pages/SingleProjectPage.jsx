@@ -16,9 +16,9 @@ const SingleProjectPage = () => {
     const fetchData = async () => {
       try {
         const [projRes, tasksRes, usersRes] = await Promise.all([
-          axios.get(`http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/projects`), // We have to filter from all projects for now since we don't have a GET /api/projects/:id explicitly set up for members without testing, but wait, the prompt says GET /api/projects/:id exists. We'll try it.
-          axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/tasks'),
-          user?.role === 'admin' ? axios.get('http://https://task-manager-backend-production-d7b3.up.railway.app:5001/api/auth/users') : Promise.resolve({ data: [] })
+          axios.get(`https://task-manager-backend-production-d7b3.up.railway.app/api/projects`), // We have to filter from all projects for now since we don't have a GET /api/projects/:id explicitly set up for members without testing, but wait, the prompt says GET /api/projects/:id exists. We'll try it.
+          axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/tasks'),
+          user?.role === 'admin' ? axios.get('https://task-manager-backend-production-d7b3.up.railway.app/api/auth/users') : Promise.resolve({ data: [] })
         ]);
 
         // Find project
