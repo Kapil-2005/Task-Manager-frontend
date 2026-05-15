@@ -12,12 +12,20 @@ import TasksPage from './pages/TasksPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminPanel from './pages/AdminPanel';
 import EmployeeList from './pages/EmployeeList';
+import HelpPage from './pages/HelpPage';
 
 const queryClient = new QueryClient();
 
 const ProtectedRoute = ({ children }) => {
   const { token, loading } = useContext(AuthContext);
-  if (loading) return <div className="flex h-screen items-center justify-center bg-bgBody font-medium text-textMuted">Loading Workspace...</div>;
+  if (loading) return (
+    <div className="flex h-screen items-center justify-center bg-bgBody">
+      <div className="flex flex-col items-center gap-4">
+        <div className="w-12 h-12 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+        <div className="text-textMuted font-medium tracking-wide">Loading Workspace...</div>
+      </div>
+    </div>
+  );
   if (!token) return <Navigate to="/login" />;
   return children;
 };
@@ -42,6 +50,7 @@ const AppRoutes = () => {
         <Route path="profile" element={<ProfilePage />} />
         <Route path="employees" element={<EmployeeList />} />
         <Route path="admin" element={<AdminPanel />} />
+        <Route path="help" element={<HelpPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
