@@ -79,24 +79,8 @@ const Login = () => {
           </button>
         </form>
         
-        <div className="w-full flex items-center justify-between mt-8 mb-6">
-          <div className="h-px bg-[#c3c6d4] flex-1"></div>
-          <span className="text-[#676879] text-sm px-4">Or Sign in with</span>
-          <div className="h-px bg-[#c3c6d4] flex-1"></div>
-        </div>
-
-        <div className="flex gap-4 w-full justify-center mb-8">
-          <button type="button" className="flex items-center gap-2 px-4 py-2 border border-[#c3c6d4] rounded bg-white hover:bg-gray-50 transition-colors text-sm font-medium text-textMain">
-            <span style={{color: '#4285F4'}}>G</span> Google
-          </button>
-          <button type="button" className="flex items-center gap-2 px-4 py-2 border border-[#c3c6d4] rounded bg-white hover:bg-gray-50 transition-colors text-sm font-medium text-textMain">
-            <span style={{color: '#00a4ef'}}>❖</span> Microsoft
-          </button>
-        </div>
-
-        <div className="text-center text-sm text-[#676879] flex flex-col gap-1">
+        <div className="text-center text-sm text-[#676879] mt-8">
           <p className="m-0">Don't have an account yet? <Link to="/signup" className="text-primary hover:underline">Sign up</Link></p>
-          <p className="m-0">Can't log in? <a href="#" className="text-primary hover:underline">Visit our help center</a></p>
         </div>
       </div>
     </div>
