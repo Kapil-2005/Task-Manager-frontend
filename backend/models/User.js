@@ -25,12 +25,23 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['member', 'admin'],
     default: 'member'
+  },
+  profilePicture: {
+    type: String,
+    default: ''
+  },
+  employeeId: {
+    type: String
   }
 }, { timestamps: true });
 
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function() {
+  if (!this.employeeId) {
+    // Generate a random 6-character alphanumeric ID
+    this.employeeId = 'EMP-' + Math.random().toString(36).substring(2, 8).toUpperCase();
+  }
   if (!this.isModified('password')) {
-    next();
+    return;
   }
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

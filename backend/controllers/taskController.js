@@ -25,32 +25,36 @@ const getTasks = async (req, res) => {
   }
 };
 
-const assignTask = async (req, res) => {
+const getTaskById = async (req, res) => {
   try {
-    const { taskId } = req.params;
-    const { assignedTo } = req.body;
-    const task = await Task.findByIdAndUpdate(taskId, { assignedTo }, { new: true });
+    const task = await Task.findById(req.params.id);
+    if (!task) return res.status(404).json({ message: 'Task not found' });
+    if (req.user.role === 'member' && task.assignedTo.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Not authorized to view this task' });
+    }
     res.status(200).json(task);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 };
 
-const updateTaskStatus = async (req, res) => {
+const updateTask = async (req, res) => {
   try {
-    const { taskId } = req.params;
-    const { status } = req.body;
+    let updateData = { ...req.body };
     
-    const task = await Task.findById(taskId);
-    if (!task) return res.status(404).json({ message: 'Task not found' });
-    
-    if (req.user.role === 'member' && task.assignedTo.toString() !== req.user._id.toString()) {
-      return res.status(403).json({ message: 'Not authorized to update this task' });
+    // Role based restrictions
+    if (req.user.role === 'member') {
+      const task = await Task.findById(req.params.id);
+      if (!task) return res.status(404).json({ message: 'Task not found' });
+      if (task.assignedTo?.toString() !== req.user._id.toString()) {
+        return res.status(403).json({ message: 'Not authorized to update this task' });
+      }
+      // Member can only update status
+      updateData = { status: req.body.status };
     }
 
-    task.status = status;
-    await task.save();
-    
+    const task = await Task.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if (!task) return res.status(404).json({ message: 'Task not found' });
     res.status(200).json(task);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -59,7 +63,8 @@ const updateTaskStatus = async (req, res) => {
 
 const deleteTask = async (req, res) => {
   try {
-    await Task.findByIdAndDelete(req.params.taskId);
+    const task = await Task.findByIdAndDelete(req.params.id);
+    if (!task) return res.status(404).json({ message: 'Task not found' });
     res.status(200).json({ message: 'Task deleted' });
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -69,7 +74,7 @@ const deleteTask = async (req, res) => {
 module.exports = {
   createTask,
   getTasks,
-  assignTask,
-  updateTaskStatus,
+  getTaskById,
+  updateTask,
   deleteTask
 };

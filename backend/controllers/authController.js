@@ -9,7 +9,7 @@ const generateToken = (id) => {
 
 const register = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'Please add all fields' });
@@ -29,6 +29,7 @@ const register = async (req, res) => {
       name,
       email,
       password,
+      role: role || 'member'
     });
 
     if (user) {
@@ -37,6 +38,8 @@ const register = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        employeeId: user.employeeId,
+        profilePicture: user.profilePicture,
         token: generateToken(user._id),
       });
     } else {
@@ -59,6 +62,8 @@ const login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        employeeId: user.employeeId,
+        profilePicture: user.profilePicture,
         token: generateToken(user._id),
       });
     } else {
@@ -77,8 +82,96 @@ const getMe = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const keyword = req.query.search ? {
+      $or: [
+        { name: { $regex: req.query.search, $options: 'i' } },
+        { email: { $regex: req.query.search, $options: 'i' } }
+      ]
+    } : {};
+    
+    const users = await User.find(keyword).select('-password');
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+    user.role = req.body.role || user.role;
+    if (req.body.employeeId !== undefined) {
+      user.employeeId = req.body.employeeId;
+    }
+    
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      role: updatedUser.role,
+      employeeId: updatedUser.employeeId,
+      profilePicture: updatedUser.profilePicture,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    
+    await user.deleteOne();
+    res.status(200).json({ message: 'User removed' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const uploadProfilePhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ message: 'Please upload a file' });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.profilePicture = `/uploads/${req.file.filename}`;
+    await user.save();
+
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      profilePicture: user.profilePicture
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   register,
   login,
   getMe,
+  getAllUsers,
+  updateUser,
+  deleteUser,
+  uploadProfilePhoto,
 };

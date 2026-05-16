@@ -11,9 +11,19 @@ connectDB();
 
 const app = express();
 
+const path = require('path');
+
 // Middleware
 app.use(express.json());
 app.use(cors());
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// Root route for testing
+app.get('/', (req, res) => {
+  res.send('API Running')
+});
 
 // Define Routes
 app.use('/api/auth', require('./routes/authRoutes'));
